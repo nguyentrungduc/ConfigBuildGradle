@@ -16,6 +16,11 @@
 ## Gradle Wrapper
 - Tìm hiểu về Gradle Wrapper là cách nhanh nhất tiếp cận với Gradle build. Nó là một batch script trên Windows, và shell scprit trên các thiết bị khác. Ta có thể chạy các Task build gradle với terminal của android bằng ./gradlew task-name gradlew(gradlew(rapper).
 - Ta có thể xem list  built task có sẵn trong project bằng:  gradlew tasks
+- Gradle Wrapper gồm số file trong project của bạn 
++ gradlew.bat : Bat script in window mà chúng ta có thể chạy các task
++ gradle/wrapper/gradle-wrapper.jar: đây là nơi chứa code của gradle wrapper
++ gradle/wrapper/gradle-wrapper.properties : đây là nơi chứa thuộc tính cấu hình gradle wrapper
+
 
 
 
