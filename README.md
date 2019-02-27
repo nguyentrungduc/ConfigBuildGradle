@@ -20,6 +20,33 @@
 + gradlew.bat : Bat script in window mà chúng ta có thể chạy các task
 + gradle/wrapper/gradle-wrapper.jar: đây là nơi chứa code của gradle wrapper
 + gradle/wrapper/gradle-wrapper.properties : đây là nơi chứa thuộc tính cấu hình gradle wrapper
+## Config Build Gradle
+### Config Build Type
+- Khi build app của bạn ta có thể tùy chọn kiểu build mà ta đã định nghĩa trong build type. Build type xác định những thuộc tính mà Gradle sử dụng khi build app của bạn, tùy theo quá trình phát triển mà ta build app khác nhau. Ví dụ khi build app debug sẽ bật trình debug lên, còn khí build app bản release ta cần bảo vệ source code và không cần bật chế độ debug, ta có thể tạo thêm một số thuộc tính cho những kiểu build này
+
+        buildTypes {
+              release {
+                  minifyEnabled true
+                  proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
+              }
+
+              debug {
+                  applicationIdSuffix ".debug"
+                  debuggable true
+              }
+              
+              staging {
+                  initWith debug
+                  manifestPlaceholders = [hostName:"internal.example.com"]
+                  applicationIdSuffix ".debugStaging"
+              }
+           }
+       }
+       
+### Config Product flavor
+Product flavor đại diện cho các phiên bản khác nhau mà chúng ta release cho user như phiên bản free hay phiên bản trả phí hay thông thường khi ta phát triển ứng dụng trong dự án có vài môi trường như DEV, Staging, Production. Ta có thể config chúng với Product flavor.
+
+
 
 
 
