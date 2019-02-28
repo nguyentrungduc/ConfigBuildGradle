@@ -71,6 +71,46 @@ Lưu ý rằng tất cả các flavor phải có dimension cụ thể thuộc m�
         
 #### Flavor Dimensions
 - Trong một số trường hợp, ta cần kết hợp nhiều cấu hình từ nhiều product flavors. Ví dụ, ta muốn tạo nhiều cấu hình cho product flavor cho "full" với "demo" trên cùng 1 API. Để làm được việc này, Gradle cho phép chúng ta tạo ra các group của product flavor bằng flavor dimensions. Khi bạn build app, Gradle sẽ kết hợp nhiều cấu hình product flavor từ mỗi flavor dimensions mà ta địng nghĩa, kết hợp cũng với config build type để ra được build variant. Gradle sẽ không kết hợp product flavors từ cùng một flavor dimensions 
+
+flavorDimensions "api", "mode"
+
+          productFlavors {
+            demo {
+              dimension "mode"
+              ...
+            }
+
+            full {
+              dimension "mode"
+              ...
+            }
+            
+            minApi24 {
+              dimension "api"
+              minSdkVersion 24
+              versionCode 30000 + android.defaultConfig.versionCode
+              versionNameSuffix "-minApi24"
+              ...
+            }
+
+            minApi23 {
+              dimension "api"
+              minSdkVersion 23
+              versionCode 20000  + android.defaultConfig.versionCode
+              versionNameSuffix "-minApi23"
+              ...
+            }
+
+            minApi21 {
+              dimension "api"
+              minSdkVersion 21
+              versionCode 10000  + android.defaultConfig.versionCode
+              versionNameSuffix "-minApi21"
+              ...
+            }
+          }
+          
+Số build variant được tạo ra bằng số product (số flavor của mỗi flavor dimension) * số build type.
         
 
 
