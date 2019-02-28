@@ -72,7 +72,7 @@ Lưu ý rằng tất cả các flavor phải có dimension cụ thể thuộc m�
 #### Flavor Dimensions
 - Trong một số trường hợp, ta cần kết hợp nhiều cấu hình từ nhiều product flavors. Ví dụ, ta muốn tạo nhiều cấu hình cho product flavor cho "full" với "demo" trên cùng 1 API. Để làm được việc này, Gradle cho phép chúng ta tạo ra các group của product flavor bằng flavor dimensions. Khi bạn build app, Gradle sẽ kết hợp nhiều cấu hình product flavor từ mỗi flavor dimensions mà ta địng nghĩa, kết hợp cũng với config build type để ra được build variant. Gradle sẽ không kết hợp product flavors từ cùng một flavor dimensions 
 
-flavorDimensions "api", "mode"
+          flavorDimensions "api", "mode"
 
           productFlavors {
             demo {
@@ -110,7 +110,22 @@ flavorDimensions "api", "mode"
             }
           }
           
-Số build variant được tạo ra bằng số product (số flavor của mỗi flavor dimension) * số build type.
+Số build variant được tạo ra bằng số product (số flavor của mỗi flavor dimension) * số build type. 
+- > Build variant: [minApi24, minApi23, minApi21][Demo, Full][Debug, Release]
+### Filter Variants
+- Gradle tạo ra build variant là tổ hợp của build type và product flavor mà mình cấu hình. Tuy nhiên, có một số variant mà ta không cần dùng đến. Ta có thể xóa nó đi bằng cách tạo ra Variant filter trong build.gradle file 
+
+        variantFilter { variant ->
+              def names = variant.flavors*.name
+              // To check for a certain build type, use variant.buildType.name == "<buildType>"
+              if (names.contains("minApi21") && names.contains("demo")) {
+                  // Gradle ignores any variants that satisfy the conditions above.
+                  setIgnore(true)
+              }
+          }
+          
+### Source Sets
+- Theo mặc định khi tạo 1 project tất cả source code và resource đều nằm trong main/ với tất cả các phiên bản build varaints. Tuy nhiên ta có thể tạo ra một source set khác để phân bổ một cách hợp lí source code và resource của các phiên bản varaints. Ví dụ bạn có thể định nghĩa 
         
 
 
