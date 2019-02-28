@@ -45,6 +45,34 @@
        
 ### Config Product flavor
 Product flavor đại diện cho các phiên bản khác nhau mà chúng ta release cho user như phiên bản free hay phiên bản trả phí hay thông thường khi ta phát triển ứng dụng trong dự án có vài môi trường như DEV, Staging, Production. Ta có thể config chúng với Product flavor.
+Lưu ý rằng tất cả các flavor phải có dimension cụ thể thuộc một nhóm flavors nào đó. Ta luôn phải gán flavors với một flavor dimension nào đó cho dù chỉ có một flavorDimensions nếu không sẽ build lỗi 
+
+                Error:All flavors must now belong to a named flavor dimension.
+                The flavor 'flavor_name' is not assigned to a flavor dimension.
+ 
+ - Ví dụ 
+ 
+                productFlavors {
+                        demo {
+                            // Assigns this product flavor to the "version" flavor dimension.
+                            // This property is optional if you are using only one dimension.
+                            dimension "version"
+                            applicationIdSuffix ".demo"
+                            versionNameSuffix "-demo"
+                        }
+                        full {
+                            dimension "version"
+                            applicationIdSuffix ".full"
+                            versionNameSuffix "-full"
+                        }
+                    }
+                    
+- Sau khi config xong product flavors, click "Sync Now" . Gradle sẽ tự động tạo ra build variant nó thực chất là tổ hợp của buildType và product flavor với format <product-flavor><Build-Type>
+        
+#### Flavor Dimensions
+- Trong một số trường hợp, ta cần kết hợp nhiều cấu hình từ nhiều product flavors. Ví dụ, ta muốn tạo nhiều cấu hình cho product flavor cho "full" với "demo" trên cùng 1 API. Để làm được việc này, Gradle cho phép chúng ta tạo ra các group của product flavor bằng flavor dimensions. Khi bạn build app, Gradle sẽ kết hợp nhiều cấu hình product flavor từ mỗi flavor dimensions mà ta địng nghĩa, kết hợp cũng với config build type để ra được build variant. Gradle sẽ không kết hợp product flavors từ cùng một flavor dimensions 
+        
+
 
 
 
