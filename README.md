@@ -125,7 +125,43 @@ Số build variant được tạo ra bằng số product (số flavor của mỗ
           }
           
 ### Source Sets
-- Theo mặc định khi tạo 1 project tất cả source code và resource đều nằm trong main/ với tất cả các phiên bản build varaints. Tuy nhiên ta có thể tạo ra một source set khác để phân bổ một cách hợp lí source code và resource của các phiên bản varaints. Ví dụ bạn có thể định nghĩa 
+- Theo mặc định khi tạo 1 project tất cả source code và resource đều nằm trong main/ với tất cả các phiên bản build varaints. Tuy nhiên ta có thể tạo ra một source set khác để phân bổ một cách hợp lí source code và resource của các phiên bản varaints. Ví dụ bạn có thể định nghĩa. 
+- Để xem tổ chức của source set ta chỉ cần Gradle -> MyApplication > Tasks > android -> Run Task
+### Configure signing settings 
+- Gradle không kí bản APK release của mình trừ khi bạn config chúng ở gradle.
+#### Step
+1. Create keystore. Keystore là một file nhị phân bao gồm private key. Bạn cần giữ key store ở nơi an toàn và bảo mật
+2. Create private key. Private key cho entity được định nghĩa trong app.
+3. Thêm cấu hình singing config vào build.gradle
+
+                android {
+                    ...
+                    defaultConfig {...}
+                    signingConfigs {
+                        release {
+                            storeFile file("myreleasekey.keystore")
+                            storePassword "password"
+                            keyAlias "MyReleaseKey"
+                            keyPassword "password"
+                        }
+                    }
+                    buildTypes {
+                        release {
+                            ...
+                            signingConfig signingConfigs.release
+                        }
+                    }
+                }
+                
+ - Để gen ra signed APK, Build -> Generate Signed APK  
+ ### Tối ưu hóa build gradle 
+
+
+
+
+
+
+
         
 
 
