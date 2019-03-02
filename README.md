@@ -158,6 +158,47 @@ Số build variant được tạo ra bằng số product (số flavor của mỗ
  Code coverage là một số liêu phần mềm được sử dụng để đo lường số dòng code của chúng ta được test trong automateds test
  ### Set up
  
+                 buildscript {
+                  repositories {
+                    google()
+                    jcenter()
+                  }
+                  dependencies {
+                    classpath 'com.android.tools.build:gradle:3.0.1'
+                    classpath 'org.jacoco:org.jacoco.core:0.8.1' //Use latest version
+                  }
+                }
+- Với các module chứa code test, cập nhật respective gradle và toolVersion như gradle của project
+- Ta có thể gặp một số issues khi lấy coverage từ Robolectric test. Để có Robolectric test trong report ta cần đặt includeNoLocationClasses = true, trong tất cả các task test 
+- Để nhận report trong các thiết bị debug -> testCoverageEnabled = true
+- AndroidJUnitRunner chạy trên cùng các thiết bị, vì vậy về cơ bản các bộ test đang chạy, nó ảnh hưởng đến các test phụ thuộc vào trạ trạng thái. Để tránh việc này -> sử dụng ORCHESTRATOR trong testOptions
+
+        apply plugin: 'jacoco'
+        jacoco {
+            toolVersion = '0.8.1' //Use latest version
+        }
+
+        tasks.withType(Test) {
+            jacoco.includeNoLocationClasses = true
+        }
+
+        android {
+            buildTypes {
+                debug {
+                    testCoverageEnabled true
+                }
+            }
+            testOptions {
+                execution 'ANDROID_TEST_ORCHESTRATOR'
+                animationsDisabled true
+
+                unitTests {
+                    includeAndroidResources = true
+                }
+            }
+        }
+
+ 
 
 
 
