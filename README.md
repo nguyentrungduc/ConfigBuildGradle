@@ -154,7 +154,10 @@ Số build variant được tạo ra bằng số product (số flavor của mỗ
                 }
                 
  - Để gen ra signed APK, Build -> Generate Signed APK  
- ### Tối ưu hóa build gradle 
+ ## Code coverage with Jacoco
+ Code coverage là một số liêu phần mềm được sử dụng để đo lường số dòng code của chúng ta được test trong automateds test
+ ### Set up
+ 
 
 
 
