@@ -8,6 +8,7 @@
 - Groovy được xuất hiện từ năm 2013 khi Google IO công bố Android Studio sử dụng Gradle build với groovy script. Groovy là một ngôn ngữ lập trình hướng đối tượng trên nền Java. Nó là một ngôn ngữ lập trình động với các tính năng tương tự như Python, Ruby, Perl, và Smalltalk. Hơn nữa, nó cũng có thể được sử dụng như là một ngôn ngữ kịch bản chạy trên nền máy ảo Java.
 ## Task
 - Nói không sai Task chính là trái tim của Gradle. Một Task trong Gradle đơn giản thì là một đơn vị công việc mà Gradle có thể hiểu và chạy được nó và phần core của Task chính là Action.
+- Một project được tạo thành từ nhiều task.
 
 - Giả sử chúng ta có thể mô tả một task compile một vài Java sources hoặc copy một số file từ thư mục này sang thư mục khác, hay đơn giản chỉ là in ra dòng chữ "Hello Gradle". Một task có thể làm những việc độc lập như in ra dòng chữ "XXX" hoặc có thể chạy tạo các dependencies với những Task khác. Gradle sẽ đảm bảo tất cả dependencies sẽ được chạy.
 
@@ -154,7 +155,94 @@ Số build variant được tạo ra bằng số product (số flavor của mỗ
                 }
                 
  - Để gen ra signed APK, Build -> Generate Signed APK  
- ### Tối ưu hóa build gradle 
+ ## Code coverage with Jacoco
+ Code coverage là một số liêu phần mềm được sử dụng để đo lường số dòng code của chúng ta được test trong automateds test
+ ### Set up
+ 
+                 buildscript {
+                  repositories {
+                    google()
+                    jcenter()
+                  }
+                  dependencies {
+                    classpath 'com.android.tools.build:gradle:3.0.1'
+                    classpath 'org.jacoco:org.jacoco.core:0.8.1' //Use latest version
+                  }
+                }
+- Với các module chứa code test, cập nhật respective gradle và toolVersion như gradle của project
+- Ta có thể gặp một số issues khi lấy coverage từ Robolectric test. Để có Robolectric test trong report ta cần đặt includeNoLocationClasses = true, trong tất cả các task test 
+- Để nhận report trong các thiết bị debug -> testCoverageEnabled = true
+- AndroidJUnitRunner chạy trên cùng các thiết bị, vì vậy về cơ bản các bộ test đang chạy, nó ảnh hưởng đến các test phụ thuộc vào trạ trạng thái. Để tránh việc này -> sử dụng ORCHESTRATOR trong testOptions
+
+        apply plugin: 'jacoco'
+        jacoco {
+            toolVersion = '0.8.1' //Use latest version
+        }
+
+        tasks.withType(Test) {
+            jacoco.includeNoLocationClasses = true
+        }
+
+        android {
+            buildTypes {
+                debug {
+                    testCoverageEnabled true
+                }
+            }
+            testOptions {
+                execution 'ANDROID_TEST_ORCHESTRATOR'
+                animationsDisabled true
+
+                unitTests {
+                    includeAndroidResources = true
+                }
+            }
+        }
+        
+ - Lấy report của intrumentation test -> chạy task createDebugCoverageReport. Report trong file build/report/coverage/debug
+ ### Local unit test
+ - Để có raw coverage file -> chạy gradle task testDebugUnitTest.Nó sẽ tạo ra file jacoco trong build/output. Android Studio không tạo report Jacoco cho unit test. Tuy nhiên ta có raw file (testDebugUnitTest.exec). 
+ 
+        task jacocoUnitTestReport(type: JacocoReport, dependsOn: ['testDebugUnitTest']) {
+
+            $buildDir = // Location of the build directory for the build Variant
+
+            def coverageSourceDirs = [
+                "src/main/java"
+            ]
+
+            def fileFilter = [
+                '**/R.class',
+                '**/R$*.class',
+                '**/*$ViewInjector*.*',
+                '**/*$ViewBinder*.*',
+                '**/BuildConfig.*',
+                '**/Manifest*.*'
+            ]
+
+            def javaClasses = fileTree(
+                dir: "$buildDir/intermediates/classes/debug",
+                excludes: fileFilter
+            )
+
+            classDirectories = files([ javaClasses ])
+            additionalSourceDirs = files(coverageSourceDirs)
+            sourceDirectories = files(coverageSourceDirs)
+            executionData = fileTree(dir: "$buildDir", includes: [
+                    "jacoco/testDebugUnitTest.exec"
+            ])
+
+            reports {
+                xml.enabled = true
+                html.enabled = true
+            }
+        }
+        
+ 
+        
+  
+
+ 
 
 
 
