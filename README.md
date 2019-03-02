@@ -8,6 +8,7 @@
 - Groovy được xuất hiện từ năm 2013 khi Google IO công bố Android Studio sử dụng Gradle build với groovy script. Groovy là một ngôn ngữ lập trình hướng đối tượng trên nền Java. Nó là một ngôn ngữ lập trình động với các tính năng tương tự như Python, Ruby, Perl, và Smalltalk. Hơn nữa, nó cũng có thể được sử dụng như là một ngôn ngữ kịch bản chạy trên nền máy ảo Java.
 ## Task
 - Nói không sai Task chính là trái tim của Gradle. Một Task trong Gradle đơn giản thì là một đơn vị công việc mà Gradle có thể hiểu và chạy được nó và phần core của Task chính là Action.
+- Một project được tạo thành từ nhiều task.
 
 - Giả sử chúng ta có thể mô tả một task compile một vài Java sources hoặc copy một số file từ thư mục này sang thư mục khác, hay đơn giản chỉ là in ra dòng chữ "Hello Gradle". Một task có thể làm những việc độc lập như in ra dòng chữ "XXX" hoặc có thể chạy tạo các dependencies với những Task khác. Gradle sẽ đảm bảo tất cả dependencies sẽ được chạy.
 
@@ -197,6 +198,49 @@ Số build variant được tạo ra bằng số product (số flavor của mỗ
                 }
             }
         }
+        
+ - Lấy report của intrumentation test -> chạy task createDebugCoverageReport. Report trong file build/report/coverage/debug
+ ### Local unit test
+ - Để có raw coverage file -> chạy gradle task testDebugUnitTest.Nó sẽ tạo ra file jacoco trong build/output. Android Studio không tạo report Jacoco cho unit test. Tuy nhiên ta có raw file (testDebugUnitTest.exec). 
+ 
+        task jacocoUnitTestReport(type: JacocoReport, dependsOn: ['testDebugUnitTest']) {
+
+            $buildDir = // Location of the build directory for the build Variant
+
+            def coverageSourceDirs = [
+                "src/main/java"
+            ]
+
+            def fileFilter = [
+                '**/R.class',
+                '**/R$*.class',
+                '**/*$ViewInjector*.*',
+                '**/*$ViewBinder*.*',
+                '**/BuildConfig.*',
+                '**/Manifest*.*'
+            ]
+
+            def javaClasses = fileTree(
+                dir: "$buildDir/intermediates/classes/debug",
+                excludes: fileFilter
+            )
+
+            classDirectories = files([ javaClasses ])
+            additionalSourceDirs = files(coverageSourceDirs)
+            sourceDirectories = files(coverageSourceDirs)
+            executionData = fileTree(dir: "$buildDir", includes: [
+                    "jacoco/testDebugUnitTest.exec"
+            ])
+
+            reports {
+                xml.enabled = true
+                html.enabled = true
+            }
+        }
+        
+ 
+        
+  
 
  
 
