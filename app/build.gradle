@@ -6,6 +6,10 @@ apply plugin: 'kotlin-android-extensions'
 
 apply plugin: 'kotlin-kapt'
 
+apply plugin: "androidx.navigation.safeargs"
+
+apply from: '../createdimen.gradle'
+
 android {
     compileSdkVersion 28
     defaultConfig {
@@ -14,7 +18,7 @@ android {
         targetSdkVersion 28
         versionCode 1
         versionName "1.0"
-        resConfigs "en", "fr"
+        resConfigs "en", "fr", "mdpi"
         multiDexEnabled true
         testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
 
@@ -113,6 +117,15 @@ android {
         if (names.contains("minApi21") && names.contains("demo") && names.contains("product")) {
             // Gradle ignores any variants that satisfy the conditions above.
             setIgnore(true)
+        }
+    }
+
+    testOptions {
+        execution 'ANDROID_TEST_ORCHESTRATOR'
+        animationsDisabled true
+
+        unitTests {
+            includeAndroidResources = true
         }
     }
 }
