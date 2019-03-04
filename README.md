@@ -237,6 +237,15 @@ Số build variant được tạo ra bằng số product (số flavor của mỗ
                 html.enabled = true
             }
         }
+  Với Kotlin, thêm "src/main/kotlin" vào coverageSourceDirs, vị trí debugTree khác với so  với java, nó đc đặt tại tmp/kotlin-classes/debug thay vì /intermediates/classes/debug. Nên ta cần thêm:
+  
+                def kotlinClasses = fileTree(
+            dir: "$buildDir/tmp/kotlin-classes/debug",
+            excludes: fileFilter
+                )
+- Tìm hiểu thêm tại : https://engineering.rallyhealth.com/android/code-coverage/testing/2018/06/04/android-code-coverage.html
+
+
         
  
         
