@@ -6,6 +6,7 @@
 - Gradle và Android plugin chạy độc lập trong Android Studio. Điều này có nghĩa là có thể built Android app trong Android Studio bằng command line bằng Gralde Wrapper.
 - Gradle sử dụng Groovy làm DSL nó miêu tả và điều khiển quá trình built ứng dụng.
 - Groovy được xuất hiện từ năm 2013 khi Google IO công bố Android Studio sử dụng Gradle build với groovy script. Groovy là một ngôn ngữ lập trình hướng đối tượng trên nền Java. Nó là một ngôn ngữ lập trình động với các tính năng tương tự như Python, Ruby, Perl, và Smalltalk. Hơn nữa, nó cũng có thể được sử dụng như là một ngôn ngữ kịch bản chạy trên nền máy ảo Java.
+-Android Plugin cho Gradle là plugin cho phép Gradle có thể biên dịch mã của bạn viết ra vào tệp APK, sign APK bằng keys của bạn bạn và thậm chí cài đặt APK lên emulator hoặc devices test. Không có nó, không có cách nào cho Gradle biết làm thế nào với code của bạn. 
 ## Task
 - Nói không sai Task chính là trái tim của Gradle. Một Task trong Gradle đơn giản thì là một đơn vị công việc mà Gradle có thể hiểu và chạy được nó và phần core của Task chính là Action.
 - Một project được tạo thành từ nhiều task.
