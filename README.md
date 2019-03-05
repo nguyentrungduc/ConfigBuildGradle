@@ -16,6 +16,13 @@
 
 - Một task còn có thể định nghĩa inputs và outputs, như một java method, ngoài ra nó còn có thể config để đọc và ghi file nữa.
 - Chúng ta có thể tự tạo ra một task sử dụng Grovvy hay Kotlin để chạy chúng. 
+                tasks.register("hello") { 
+                    doLast { 
+                        println 'Hello, World!'
+                    }
+                }
+  Tìm hiểu thêm về cách tạo task              
+- https://guides.gradle.org/writing-gradle-tasks/
 ## Gradle Wrapper
 - Tìm hiểu về Gradle Wrapper là cách nhanh nhất tiếp cận với Gradle build. Nó là một batch script trên Windows, và shell scprit trên các thiết bị khác. Ta có thể chạy các Task build gradle với terminal của android bằng ./gradlew task-name gradlew(gradlew(rapper).
 - Ta có thể xem list  built task có sẵn trong project bằng:  gradlew tasks
